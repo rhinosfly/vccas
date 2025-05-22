@@ -70,7 +70,7 @@ def main() -> None:
     DIR_PATH = os.path.dirname(os.path.realpath(__file__))
     SAVING_TO_FILE =  DIR_PATH + "/../target/size.tsv"
     MEASURING_FILE1 = DIR_PATH + "/../.git"
-    MEASURING_FILE2 = DIR_PATH  + "/../target/test-report"
+    MEASURING_FILE2 = DIR_PATH  + "/../target/test-report.zip"
     line = append_line(saving_to_file=SAVING_TO_FILE, measuring_file1=MEASURING_FILE1, measuring_file2=MEASURING_FILE2)
     print(line)
     
