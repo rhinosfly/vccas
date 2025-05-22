@@ -3,7 +3,7 @@
 $ROOT_PATH = Split-Path $PSScriptRoot
 $SRC_PATH = [IO.Path]::Combine($ROOT_PATH, "target")
 $TARGET_PATH = [IO.Path]::Combine($ROOT_PATH, "src")
-$NAME = "RSR00114_Rev. 3 (Test Report, TCD, AC Power Testing)"
+$NAME = "test-report"
 $SRC = Join-Path $SRC_PATH $NAME
 $TARGET = Join-Path $TARGET_PATH $NAME
 

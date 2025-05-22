@@ -2,7 +2,7 @@ import hashlib
 import os
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-NAME = "RSR00114_Rev. 3 (Test Report, TCD, AC Power Testing)"
+NAME = "test-report"
 ORIGINAL = DIR_PATH + "/../target/" + NAME + ".zip"
 NEW_FILE = DIR_PATH + "/../src/" + NAME + ".docx"
 

@@ -2,7 +2,7 @@
 # also create .md file which can be diffed
 
 $ROOT_PATH = Split-Path $PSScriptRoot
-$NAME = "RSR00114_Rev. 3 (Test Report, TCD, AC Power Testing)"
+$NAME = "test-report"
 $SRC_PATH = [IO.Path]::Combine($ROOT_PATH, "src")
 $SRC = Join-Path $SRC_PATH "$NAME"
 $TARGET_PATH = [IO.Path]::Combine($ROOT_PATH, "target")
