@@ -11,12 +11,12 @@ $TARGET = Join-Path $TARGET_PATH $NAME
 if (Test-Path "$TARGET.docx") {
 	Remove-Item "$TARGET.docx" -verbose
 }
-if (Test-Path "$TARGET.zip") {
-	Remove-Item "$TARGET.zip" -verbose
+if (Test-Path "$SRC.zip") {
+	Remove-Item "$SRC.zip" -verbose
 }
 
 # zip
-Compress-Archive "$SRC\*" "$TARGET.zip"
+Compress-Archive "$SRC\*" "$SRC.zip"
 
 # change name 
-Rename-Item "$TARGET.zip" "$TARGET.docx"
+Copy-Item "$SRC.zip" "$TARGET.docx"
