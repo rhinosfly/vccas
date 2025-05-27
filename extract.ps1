@@ -15,21 +15,19 @@ if (Test-Path "$TARGET.zip") {
 if (Test-Path "$TARGET") {
 	Remove-Item "$TARGET" -Recurse -Verbose
 }
-if (Test-Path "$TARGET.md") {
-	Remove-Item "$TARGET.md" -Recurse -Verbose
-}
-
 
 # copy under change name
 # NOTE: copy necessary so I can keep the docx open in MS docs
 Copy-Item "$SRC.docx" "$TARGET.zip"
 
 # extract
-Write-Output "`r`nExpand-Archive $TARGET.zip"
+Write-Output "`r`nEXTRACTING"
 Expand-Archive "$TARGET.zip" $TARGET
-Write-Output "DONE"
+Write-Output "DONE`r`n"
 
 #convert
-Write-Output "`r`npandoc.exe $SRC.docx -o $TARGET.md"
-pandoc.exe "$SRC.docx" -o "$TARGET.md"
+Write-Output "`r`nCONVERTING"
+pandoc.exe "$SRC.docx" -o "$TARGET.pandoc.md"
+pandoc.exe "$SRC.docx" -o "$TARGET.strict.md" -t markdown_strict
+pandoc.exe "$SRC.docx" -o "$TARGET.org"
 Write-Output "DONE`r`n"
