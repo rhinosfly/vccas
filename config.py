@@ -27,16 +27,10 @@ def get_abs_path(path:str) -> str:
 
 def check_toml(config: dict[str, Any]):
     config["target"] = get_abs_path(config["target"])
-    if not os.path.isdir(config["target"]):
-        raise OSError(f"target: {config["target"]} not a directory")
     for i, file in enumerate(config["documents"]):
         file = config["documents"][i] = get_abs_path(file)
-        if not os.path.isfile(file):
-            raise OSError(f"documents: {file} not a file")
     for i, path in enumerate(config["measuring"]):
         path = config["measuring"][i] = get_abs_path(path)
-        if not os.path.exists(path):
-            raise OSError(f"measuring: {path} not a valid path")
     config["measurements"] = get_abs_path(config["measurements"])
 
 
