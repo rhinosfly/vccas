@@ -1,11 +1,11 @@
 import hashlib
 import os
 
-import config
-conf = config.get_config()
+from config import get_config
+config = get_config()
 
-ORIGINAL = conf["zip_path"]
-NEW_FILE = conf["document_path"]
+ORIGINAL = config["archives"][0]
+NEW_FILE = config["documents"][0]
 
 def get_file_checksum(file_name):
     with open(file_name, 'rb') as file_to_check:
