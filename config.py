@@ -4,9 +4,9 @@ import tomllib
 import os
 
 '''toml format:
-document_path = "filepath"
-unzipped_files_path = "directory path"
-measuring_paths = ["path1", "path2"]
+documents = "filepath"
+target = "directory path"
+measuring = ["path1", "path2"]
 '''
 CONFIG_PATH = "config.toml"
 
@@ -19,19 +19,28 @@ def get_toml() -> dict[str,str]:
 
 
 def check_toml(config: dict):
-    if not os.path.isfile(config["document_path"]):
-        raise OSError(f"document_path: {config["document_path"]} not a file")
-    if not os.path.isdir(config["unzipped_files_path"]):
-        raise OSError(f"unzipped_files_path: {config["unzipped_files_path"]} not a directory")
-    for path in config["measuring_paths"]:
-        if not os.path.exists(path):
-            raise OSError(f"measuring_paths: {path} not a valid path")
+    for file in config["documents"]:
+        if not os.path.isfile(file):
+            raise OSError(f"documents: {file} not a file")
+        if not os.path.isdir(config["target"]):
+            raise OSError(f"target: {config["target"]} not a directory")
+        for path in config["measuring"]:
+            if not os.path.exists(path):
+                raise OSError(f"measuring: {path} not a valid path")
 
 
 def get_dependent_variables(config: dict) -> dict:
     '''add more keys to config'''
-    zip_path = config["unzipped_files_path"] + ".zip"
-    config["zip_path"] = zip_path   
+    config["targets"] = []
+    config["archives"] = []
+    for doc in config["documents"]:
+        basename = os.path.basename(doc)
+        filename = os.path.splitext(basename)[0]
+        target = os.path.join(config["target"], filename)
+        archive = target + ".zip"
+        config["targets"].append(target)
+        config["archives"].append(archive)
+    del config["target"]
     
 def get_config():
     config = get_toml()
