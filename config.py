@@ -7,6 +7,7 @@ import os
 documents = "filepath"
 target = "directory path"
 measuring = ["path1", "path2"]
+measurements = "path"
 '''
 CONFIG_PATH = "config.toml"
 

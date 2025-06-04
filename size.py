@@ -2,6 +2,7 @@
 
 from genericpath import isfile
 import os
+from config import get_config
 
 
 def get_dir_size(start_path: str = '.') -> int:
@@ -67,10 +68,10 @@ def append_line(saving_to_file:str, measuring_file1:str, measuring_file2:str) ->
 
 def main() -> None:
     """add a new row to the tsv file, and print row"""
-    DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-    SAVING_TO_FILE =  DIR_PATH + "/../target/size.tsv"
-    MEASURING_FILE1 = DIR_PATH + "/../.git"
-    MEASURING_FILE2 = DIR_PATH  + "/../target/test-report.zip"
+    config = get_config()
+    SAVING_TO_FILE =  config["measurements"]
+    MEASURING_FILE1 = config["measuring"][0]
+    MEASURING_FILE2 = config["measuring"][1]
     line = append_line(saving_to_file=SAVING_TO_FILE, measuring_file1=MEASURING_FILE1, measuring_file2=MEASURING_FILE2)
     print(line)
     
