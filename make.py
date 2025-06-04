@@ -41,12 +41,14 @@ def make_xml(config: dict[str,Any]):
         convert(src=doc, dst=markdown)
 
 
+
+
 def main(config: dict[str,Any]):
     if len(sys.argv) != 2:
         raise BaseException("not enough arguments")
     if sys.argv[1] == "docx":
         make_docx(config)
-    elif sys.argv[1] == "xml":
+    if sys.argv[1] == "xml":
         make_xml(config)
     else:
         raise BaseException("invalid subcommand")
