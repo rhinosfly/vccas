@@ -1,6 +1,5 @@
 """update a .tsv file on every call with the size and change in size of a .git directory"""
 
-from genericpath import isfile
 import os
 from config import get_config
 
@@ -19,19 +18,27 @@ def get_dir_size(start_path: str = '.') -> int:
     return total_size
 
 
-def format_line(git_size:int, doc_size:int, git_diff:int, doc_diff:int) -> str:
+def format_line(sizes: list[int], diffs: list[int]) -> str:
     """take size and diff and returns a line of .tsv format"""
-    formatted_line =  (f'{git_size:,}\t{doc_size:,}\t{git_diff:,}\t{doc_diff:,}')
-    return formatted_line
+    formatted_line = ""
+    length:int = min(len(sizes), len(diffs))
+    for i in range(length):
+        formatted_line += f"{sizes[i]:,}\t{diffs[i]:,}\t"
+    return formatted_line[:-1]
 
 
-def unformat_line(line: str) -> tuple[int, int, int, int]:
-    """take line of .tsv format and return size and diff"""
+def unformat_line(line: str) -> tuple[list[int],list[int]]:
+    """take line of .tsv format and return list of sizes and list of diffs"""
+    sizes: list[int] = []
+    diffs: list[int] = []
     cleaned_line: str = line.replace(',','')
     words: list[str] = cleaned_line.split()
-    git_size, doc_size, git_diff, doc_diff = words
-    vars =  (int(git_size), int(doc_size), int(git_diff), int(doc_diff))
-    return vars
+    for i in range(len(words)):
+        if i%2 == 0:
+            sizes.append(int(words[i]))
+        else:
+            diffs.append(int(words[i]))
+    return sizes, diffs
 
 def get_last_line(saving_to_file:str) -> str:
     """get last line of the tsv file"""
@@ -42,25 +49,29 @@ def get_last_line(saving_to_file:str) -> str:
         return lines[-1]
 
 
-def get_last_sizes(saving_to_file:str) -> tuple[int,int]:
+def get_last_sizes(saving_to_file:str) -> list[int]:
     """return size element of final row in tsv file"""
+    sizes:list[int] = []
     try:
         last_line = get_last_line(saving_to_file=saving_to_file)
     except:
-        last_git_size = last_doc_size = 0
+        sizes.append(0)
     else:
-        last_git_size, last_doc_size,_,_ = unformat_line(last_line)
-    return last_git_size, last_doc_size
+        sizes, diffs = unformat_line(last_line)
+        _ = diffs
+    return sizes
      
 
-def append_line(saving_to_file:str, measuring_file1:str, measuring_file2:str) -> str:
+def append_line(saving_to_file:str, measuring:list[str]) -> str:
     """add a new row to the given tsv file, and return row"""
-    last_git_size, last_doc_size = get_last_sizes(saving_to_file)
-    git_size = get_dir_size(measuring_file1)
-    doc_size = get_dir_size(measuring_file2)
-    git_diff = git_size - last_git_size
-    doc_diff = doc_size - last_doc_size
-    line = format_line(git_size=git_size, doc_size=doc_size, git_diff=git_diff, doc_diff=doc_diff)
+    last_sizes = get_last_sizes(saving_to_file)
+    new_sizes:list[int] = []
+    diffs:list[int] = []
+    for i, file in enumerate(measuring):
+        new_sizes.append(get_dir_size(file))
+        diffs.append(new_sizes[i] - last_sizes[i])
+        
+    line = format_line(new_sizes, diffs)
     with open(saving_to_file, 'a') as file:
         file.write(line+'\n')
     return line
@@ -70,9 +81,8 @@ def main() -> None:
     """add a new row to the tsv file, and print row"""
     config = get_config()
     SAVING_TO_FILE =  config["measurements"]
-    MEASURING_FILE1 = config["measuring"][0]
-    MEASURING_FILE2 = config["measuring"][1]
-    line = append_line(saving_to_file=SAVING_TO_FILE, measuring_file1=MEASURING_FILE1, measuring_file2=MEASURING_FILE2)
+    MEASURING: list[str] = config["measuring"]
+    line = append_line(saving_to_file=SAVING_TO_FILE, measuring=MEASURING)
     print(line)
     
 
