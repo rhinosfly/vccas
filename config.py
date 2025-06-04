@@ -30,10 +30,8 @@ def check_toml(config: dict):
 
 def get_dependent_variables(config: dict) -> dict:
     '''add more keys to config'''
-    basename = os.path.basename(config["document_path"])
-    filename = os.path.splitext(basename)[0]
-    config["filename"] = filename
-    
+    zip_path = config["unzipped_files_path"] + ".zip"
+    config["zip_path"] = zip_path   
     
 def get_config():
     config = get_toml()
