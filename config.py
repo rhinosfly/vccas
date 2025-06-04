@@ -10,24 +10,34 @@ target = "directory path"
 measuring = ["path1", "path2"]
 measurements = "path"
 '''
-CONFIG_PATH = "config.toml"
 
+def get_this_directory():
+    return os.path.dirname(os.path.abspath(__file__))
+
+THIS_DIRECTORY = get_this_directory()
+CONFIG_PATH = os.path.join(THIS_DIRECTORY, "config.toml")
 
 def get_toml() -> dict[str,Any]:
     with open(CONFIG_PATH,"rb") as file:
         config = tomllib.load(file)
     return config
 
+def get_abs_path(path:str) -> str:
+    return os.path.abspath(os.path.join(THIS_DIRECTORY, path))
 
 def check_toml(config: dict[str, Any]):
-    for file in config["documents"]:
+    config["target"] = get_abs_path(config["target"])
+    if not os.path.isdir(config["target"]):
+        raise OSError(f"target: {config["target"]} not a directory")
+    for i, file in enumerate(config["documents"]):
+        file = config["documents"][i] = get_abs_path(file)
         if not os.path.isfile(file):
             raise OSError(f"documents: {file} not a file")
-        if not os.path.isdir(config["target"]):
-            raise OSError(f"target: {config["target"]} not a directory")
-        for path in config["measuring"]:
-            if not os.path.exists(path):
-                raise OSError(f"measuring: {path} not a valid path")
+    for i, path in enumerate(config["measuring"]):
+        path = config["measuring"][i] = get_abs_path(path)
+        if not os.path.exists(path):
+            raise OSError(f"measuring: {path} not a valid path")
+    config["measurements"] = get_abs_path(config["measurements"])
 
 
 def get_dependent_variables(config: dict[str, str|list[str]]):
