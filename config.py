@@ -2,6 +2,7 @@
 
 import tomllib
 import os
+from typing import Any
 
 '''toml format:
 documents = "filepath"
@@ -12,14 +13,13 @@ measurements = "path"
 CONFIG_PATH = "config.toml"
 
 
-def get_toml() -> dict[str,str]:
-    #get data
+def get_toml() -> dict[str,Any]:
     with open(CONFIG_PATH,"rb") as file:
         config = tomllib.load(file)
     return config
 
 
-def check_toml(config: dict):
+def check_toml(config: dict[str, Any]):
     for file in config["documents"]:
         if not os.path.isfile(file):
             raise OSError(f"documents: {file} not a file")
@@ -30,15 +30,15 @@ def check_toml(config: dict):
                 raise OSError(f"measuring: {path} not a valid path")
 
 
-def get_dependent_variables(config: dict) -> dict:
+def get_dependent_variables(config: dict[str, str|list[str]]):
     '''add more keys to config'''
     config["targets"] = []
     config["archives"] = []
     for doc in config["documents"]:
-        basename = os.path.basename(doc)
-        filename = os.path.splitext(basename)[0]
-        target = os.path.join(config["target"], filename)
-        archive = target + ".zip"
+        basename:str = os.path.basename(doc)
+        filename:str = os.path.splitext(basename)[0]
+        target:str = os.path.join(str(config["target"]), filename)
+        archive:str = target + ".zip"
         config["targets"].append(target)
         config["archives"].append(archive)
     del config["target"]
