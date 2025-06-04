@@ -27,5 +27,14 @@ def get_config() -> dict[str,str]:
     return config
 
 
+def get_dependent_variables(config: dict) -> dict:
+    '''add more keys to config'''
+    basename = os.path.basename(config["document_path"])
+    filename = os.path.splitext(basename)[0]
+    config["filename"] = filename
+    
+
 if __name__ == "__main__":
-    print(get_config())
+    config = get_config()
+    get_dependent_variables(config)
+    print(config)
