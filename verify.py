@@ -1,10 +1,11 @@
 import hashlib
 import os
 
-DIR_PATH = os.path.dirname(os.path.realpath(__file__))
-NAME = "test-report"
-ORIGINAL = DIR_PATH + "/../target/" + NAME + ".zip"
-NEW_FILE = DIR_PATH + "/../src/" + NAME + ".docx"
+import config
+conf = config.get_config()
+
+ORIGINAL = conf["zip_path"]
+NEW_FILE = conf["document_path"]
 
 def get_file_checksum(file_name):
     with open(file_name, 'rb') as file_to_check:
