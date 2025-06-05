@@ -1,10 +1,7 @@
 import hashlib
 
 from config import get_config
-config = get_config()
 
-ORIGINAL = config["archives"][0]
-NEW_FILE = config["documents"][0]
 
 def get_file_checksum(file_name: str):
     with open(file_name, 'rb') as file_to_check:
@@ -13,6 +10,10 @@ def get_file_checksum(file_name: str):
     return checksum
 
 def main():
+    config = get_config()
+    ORIGINAL = config["archives"][0]
+    NEW_FILE = config["documents"][0]
+
     original_md5 = get_file_checksum(ORIGINAL)
     new_file_md5 = get_file_checksum(NEW_FILE)
     print("original:\t",original_md5)
