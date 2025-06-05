@@ -20,7 +20,7 @@ def make_docx(config: dict[str,Any]):
         print(f"archive \t{relpath(target)} \tto \t{relpath(archive)}")
         shutil.make_archive(base_name=archive, root_dir=target, format="zip")
         # copy to docx
-        print(f"copy \t{relpath(archive)} \tto \t{relpath(doc)}")
+        print(f"copy \t\t{relpath(archive)} \tto \t{relpath(doc)}")
         shutil.copy2(src=archive, dst=doc)
 
 def make_xml(config: dict[str,Any]):
@@ -31,10 +31,10 @@ def make_xml(config: dict[str,Any]):
         target = config["targets"][i]
         markdown = target + ".md"
 
-        print(f"copy \t{relpath(doc)} \tto \t{relpath(archive)}")
+        print(f"copy \t\t{relpath(doc)} \tto \t{relpath(archive)}")
         shutil.copy2(src=doc, dst=archive)
         
-        print(f"unpack \t{relpath(archive)} \tto \t{relpath(target)}")
+        print(f"unpack \t\t{relpath(archive)} \tto \t{relpath(target)}")
         shutil.unpack_archive(filename=archive, extract_dir=target)
 
         print(f"convert \t{relpath(doc)} \tto \t{relpath(markdown)}")
@@ -48,7 +48,7 @@ def main(config: dict[str,Any]):
         raise BaseException("not enough arguments")
     if sys.argv[1] == "docx":
         make_docx(config)
-    if sys.argv[1] == "xml":
+    elif sys.argv[1] == "xml":
         make_xml(config)
     else:
         raise BaseException("invalid subcommand")
