@@ -24,4 +24,5 @@ def main():
         print("MD5 verification:\nfailed!")
 
 
-main()
+if __name__ == "__main__":
+    main()
