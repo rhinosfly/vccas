@@ -1,23 +1,11 @@
-# docx scripts
+# version contoled compreed archive scripts (VCCAS)
 
 ## overview
 
-set of scripts for effectively version controlling docx projects
-
-## goals
-
-- zip/unzip
-- track size
-- verify checksum
+set of scripts for effectively version controlling compressed-archive projects
 
 ## todo
 
 - [ ] unify CLI
-- [ ] get config variables from toml file
-
-```toml
-[project]
-document_name      = my_document
-document_path      = ../src
-unziped_files_path = ../target
-```
+- [ ] fix pandoc error
+- [ ] store hash
