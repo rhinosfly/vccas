@@ -65,6 +65,10 @@ def get_last_sizes(saving_to_file:str) -> list[int]:
 def append_line(saving_to_file:str, measuring:list[str]) -> str:
     """add a new row to the given tsv file, and return row"""
     last_sizes = get_last_sizes(saving_to_file)
+    # pad last_sizes, in case of adding new file
+    for i in range(len(measuring) - len(last_sizes)):
+        last_sizes.append(0)
+    # end
     new_sizes:list[int] = []
     diffs:list[int] = []
     for i, file in enumerate(measuring):
