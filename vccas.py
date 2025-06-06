@@ -6,7 +6,7 @@ import verify
 import convert
 
 PROGRAM_NAME = "vccas"
-VERSION = "v0.2.0"
+VERSION = "v0.3.0"
 
 
 def parse_args() -> argparse.Namespace:
