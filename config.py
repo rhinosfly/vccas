@@ -18,7 +18,7 @@ THIS_DIRECTORY = get_this_directory()
 CONFIG_FILE_NAME = ".vccas.toml"
 
 
-def get_toml(search_path: str = ".") -> dict[str,Any]:
+def get_toml(search_path: str) -> dict[str,Any]:
     if os.path.isfile(search_path):
         config_path = search_path
     elif os.path.isdir(search_path):
@@ -54,12 +54,16 @@ def get_dependent_variables(config: dict[str, str|list[str]]):
         config["archives"].append(archive)
     del config["target"]
     
-def get_config(search_file: str = "."):
-    config = get_toml(search_path=search_file)
+def get_config(search_path: str):
+    config = get_toml(search_path=search_path)
     process_toml(config)
     get_dependent_variables(config)
     return config
     
-if __name__ == "__main__":
-    config = get_config()
+
+def main():
+    config = get_config(".")
     print(config)
+
+if __name__ == "__main__":
+    main()

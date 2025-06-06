@@ -1,3 +1,4 @@
+from argparse import Namespace
 import hashlib
 
 from config import get_config
@@ -9,8 +10,8 @@ def get_file_checksum(file_name: str):
         checksum = hashlib.md5(data).hexdigest()
     return checksum
 
-def main():
-    config = get_config()
+def verify(args: Namespace):
+    config = get_config(args.CONFIG)
     ORIGINAL = config["archives"][0]
     NEW_FILE = config["documents"][0]
 
@@ -23,6 +24,11 @@ def main():
         print("MD5 verification:\nsuccess!")
     else:
         print("MD5 verification:\nfailed!")
+
+
+def main():
+    args = Namespace(CONFIG=".")
+    verify(args)
 
 
 if __name__ == "__main__":
