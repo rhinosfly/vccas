@@ -15,17 +15,24 @@ def get_this_directory():
     return os.path.dirname(os.path.abspath(__file__))
 
 THIS_DIRECTORY = get_this_directory()
-CONFIG_PATH = os.path.join(THIS_DIRECTORY, "config.toml")
+CONFIG_FILE_NAME = ".vccas.toml"
 
-def get_toml() -> dict[str,Any]:
-    with open(CONFIG_PATH,"rb") as file:
+
+def get_toml(search_path: str = ".") -> dict[str,Any]:
+    if os.path.isfile(search_path):
+        config_path = search_path
+    elif os.path.isdir(search_path):
+        config_path = os.path.join(search_path, CONFIG_FILE_NAME)
+    else:
+        raise FileNotFoundError(CONFIG_FILE_NAME + "not found")
+    with open(config_path,"rb") as file:
         config = tomllib.load(file)
     return config
 
 def get_abs_path(path:str) -> str:
     return os.path.abspath(os.path.join(THIS_DIRECTORY, path))
 
-def check_toml(config: dict[str, Any]):
+def process_toml(config: dict[str, Any]):
     config["target"] = get_abs_path(config["target"])
     for i, file in enumerate(config["documents"]):
         file = config["documents"][i] = get_abs_path(file)
@@ -47,9 +54,9 @@ def get_dependent_variables(config: dict[str, str|list[str]]):
         config["archives"].append(archive)
     del config["target"]
     
-def get_config():
-    config = get_toml()
-    check_toml(config)
+def get_config(search_file: str = "."):
+    config = get_toml(search_path=search_file)
+    process_toml(config)
     get_dependent_variables(config)
     return config
     
