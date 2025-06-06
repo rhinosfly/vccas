@@ -1,5 +1,6 @@
 """update a .tsv file on every call with the size and change in size of a .git directory"""
 
+from argparse import Namespace
 import os
 from config import get_config
 
@@ -81,14 +82,18 @@ def append_line(saving_to_file:str, measuring:list[str]) -> str:
     return line
 
 
-def main() -> None:
+def measure(args: Namespace):
     """add a new row to the tsv file, and print row"""
-    config = get_config()
+    config = get_config(args.CONFIG)
     SAVING_TO_FILE =  config["measurements"]
     MEASURING: list[str] = config["measuring"]
     line = append_line(saving_to_file=SAVING_TO_FILE, measuring=MEASURING)
     print(line)
     
+
+def main():
+    args = Namespace(CONFIG=".")
+    measure(args)
 
 if __name__ == "__main__":
     main()

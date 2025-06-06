@@ -24,7 +24,7 @@ def parse_args() -> argparse.Namespace:
     verifier  = subparsers.add_parser('verify', help="verify source matches archive", parents=[parent_parser])
     verifier.set_defaults(func=verify.verify)
     measure = subparsers.add_parser("measure", help="record and print size of configured files", parents=[parent_parser])
-    measure.set_defaults(func=size.main)
+    measure.set_defaults(func=size.measure)
 
     args = parser.parse_args()
     return args
