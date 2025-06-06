@@ -1,4 +1,5 @@
 '''extract zip archive into docx'''
+from argparse import Namespace
 import shutil
 from os.path import relpath
 import pandoc
@@ -9,9 +10,9 @@ def convert(src: str, dst: str):
     tmp = pandoc.read(file=src)
     pandoc.write(tmp, file=dst)
 
-def make_docx():
+def make_docx(args: Namespace):
     '''create docx from xml'''
-    config = get_config()
+    config = get_config(args.CONFIG)
     for i,_ in enumerate(config["documents"]):
         target = config["targets"][i]
         archive = config["archives"][i]
@@ -23,9 +24,9 @@ def make_docx():
         print(f"copy \t\t{relpath(archive)} \tto \t{relpath(doc)}")
         shutil.copy2(src=archive, dst=doc)
 
-def make_xml():
+def make_xml(args: Namespace):
     '''extract xml from docx'''
-    config = get_config()
+    config = get_config(args.CONFIG)
     for i in range(len(config["documents"])):
         doc = config["documents"][i]
         archive = config["archives"][i]
@@ -45,12 +46,13 @@ def make_xml():
 
 
 def main():
+    args = Namespace(CONFIG=".")
     if len(sys.argv) != 2:
         raise BaseException("not enough arguments")
-    if sys.argv[1] == "docx":
-        make_docx()
-    elif sys.argv[1] == "xml":
-        make_xml()
+    if sys.argv[1] == "archive":
+        make_docx(args)
+    elif sys.argv[1] == "extract":
+        make_xml(args)
     else:
         raise BaseException("invalid subcommand")
     
