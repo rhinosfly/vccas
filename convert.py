@@ -1,7 +1,6 @@
 '''extract zip archive into docx'''
 import shutil
 from os.path import relpath
-from typing import Any
 import pandoc
 import sys
 from config import get_config
