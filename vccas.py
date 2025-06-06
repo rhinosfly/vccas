@@ -5,10 +5,13 @@ import size
 import verify
 import convert
 
+PROGRAM_NAME = "vccas"
+VERSION = "v0.2.0"
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--echo", help="echo given string", metavar="STRING")
+    parser.add_argument("-v", "--version", action="version", version=f"{PROGRAM_NAME} {VERSION}" )
 
     subparsers = parser.add_subparsers(title="subcommands", required = True)
     extracter = subparsers.add_parser("extract", help="extract source to target")
@@ -26,7 +29,6 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    print(args)
     args.func()
 
 
