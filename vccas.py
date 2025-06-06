@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     archiver.set_defaults(func=convert.make_docx)
     verifier  = subparsers.add_parser('verify', help="verify source matches archive")
     verifier.set_defaults(func=verify.main)
-    measure = subparsers.add_parser("measure", help="measure size configured files")
+    measure = subparsers.add_parser("measure", help="record and print size of configured files")
     measure.set_defaults(func=size.main)
 
     args = parser.parse_args()
