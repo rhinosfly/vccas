@@ -11,34 +11,22 @@ measuring = ["path1", "path2"]
 measurements = "path"
 '''
 
-def get_this_directory():
-    return os.path.dirname(os.path.abspath(__file__))
-
-THIS_DIRECTORY = get_this_directory()
 CONFIG_FILE_NAME = ".vccas.toml"
 
 
-def get_toml(search_path: str) -> dict[str,Any]:
-    if os.path.isfile(search_path):
-        config_path = search_path
-    elif os.path.isdir(search_path):
-        config_path = os.path.join(search_path, CONFIG_FILE_NAME)
-    else:
-        raise FileNotFoundError(CONFIG_FILE_NAME + "not found")
-    with open(config_path,"rb") as file:
+def get_toml(config_file: str) -> dict[str,Any]:
+    with open(config_file,"rb") as file:
         config = tomllib.load(file)
     return config
 
-def get_abs_path(path:str) -> str:
-    return os.path.abspath(os.path.join(THIS_DIRECTORY, path))
 
-def process_toml(config: dict[str, Any]):
-    config["target"] = get_abs_path(config["target"])
+def rectify_paths(config: dict[str, Any], config_dir: str):
+    config["target"] = os.path.join(config_dir, config["target"])
     for i, file in enumerate(config["documents"]):
-        file = config["documents"][i] = get_abs_path(file)
+        config["documents"][i] = os.path.join(config_dir, file)
     for i, path in enumerate(config["measuring"]):
-        path = config["measuring"][i] = get_abs_path(path)
-    config["measurements"] = get_abs_path(config["measurements"])
+        config["measuring"][i] = os.path.join(config_dir, path)
+    config["measurements"] = os.path.join(config_dir, config["measurements"])
 
 
 def get_dependent_variables(config: dict[str, str|list[str]]):
@@ -55,8 +43,18 @@ def get_dependent_variables(config: dict[str, str|list[str]]):
     del config["target"]
     
 def get_config(search_path: str):
-    config = get_toml(search_path=search_path)
-    process_toml(config)
+    # get path and filename
+    if os.path.isfile(search_path):
+        config_dir = os.path.dirname(search_path)
+        config_file = search_path
+    elif os.path.isdir(search_path):
+        config_dir = search_path
+        config_file = os.path.join(search_path, CONFIG_FILE_NAME)
+    else:
+        raise FileNotFoundError(CONFIG_FILE_NAME + "not found")
+    # get config
+    config = get_toml(config_file=config_file)
+    rectify_paths(config=config, config_dir=config_dir)
     get_dependent_variables(config)
     return config
     
