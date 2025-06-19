@@ -18,9 +18,9 @@ def parse_args() -> argparse.Namespace:
 
     subparsers = parser.add_subparsers(title="subcommands", required = True)
     extracter = subparsers.add_parser("extract", help="extract source to target", parents=[parent_parser])
-    extracter.set_defaults(func=convert.make_xml)
+    extracter.set_defaults(func=convert.extract)
     archiver = subparsers.add_parser("archive", help="archive target to source", parents=[parent_parser])
-    archiver.set_defaults(func=convert.make_docx)
+    archiver.set_defaults(func=convert.archive)
     verifier  = subparsers.add_parser('verify', help="verify source matches archive", parents=[parent_parser])
     verifier.set_defaults(func=verify.verify)
     measure = subparsers.add_parser("measure", help="record and print size of configured files", parents=[parent_parser])

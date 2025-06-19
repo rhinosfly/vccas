@@ -10,8 +10,8 @@ def convert(src: str, dst: str):
     tmp = pandoc.read(file=src)
     pandoc.write(tmp, file=dst)
 
-def make_docx(args: Namespace):
-    '''create docx from xml'''
+def archive(args: Namespace):
+    '''create document from xml'''
     config = get_config(args.CONFIG)
     for i,_ in enumerate(config["documents"]):
         target = config["targets"][i]
@@ -24,8 +24,8 @@ def make_docx(args: Namespace):
         print(f"copy \t\t{relpath(archive)} \tto \t{relpath(doc)}")
         shutil.copy2(src=archive, dst=doc)
 
-def make_xml(args: Namespace):
-    '''extract xml from docx'''
+def extract(args: Namespace):
+    '''extract xml from archive'''
     config = get_config(args.CONFIG)
     for i in range(len(config["documents"])):
         doc = config["documents"][i]
@@ -50,9 +50,9 @@ def main():
     if len(sys.argv) != 2:
         raise BaseException("not enough arguments")
     if sys.argv[1] == "archive":
-        make_docx(args)
+        archive(args)
     elif sys.argv[1] == "extract":
-        make_xml(args)
+        extract(args)
     else:
         raise BaseException("invalid subcommand")
     
