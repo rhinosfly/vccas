@@ -33,7 +33,8 @@ file_extention_mappings = {
 
 def convert(src: str, dst: str):
     """call appropriate conversion function on files accoridng to conversion mappings"""
-    src_type = path.splitext(src)[1]
+    src_type = path.splitext(src)[1][1:]
+    print(src_type)
     if src_type in conversion_mappings.keys():
         conversion_mappings[src_type].convert(src, dst)
     else:
@@ -41,7 +42,7 @@ def convert(src: str, dst: str):
 
 def get_plaintext_file_extention(src: str) -> str:
     '''return corrosponding plaintext type for each archive type'''
-    src_type = path.splitext(src)[1]
+    src_type = path.splitext(src)[1][1:] # to get rid of the . before extention name
     if src_type in conversion_mappings.keys():
         target_type = conversion_mappings[src_type].target_type
     else:
@@ -73,8 +74,7 @@ def extract(args: Namespace):
         doc = config["documents"][i]
         archive = config["archives"][i]
         target = config["targets"][i]
-        plaintext = target + "." + get_plaintext_file_extention(src=archive)
-
+        plaintext = target + "." + get_plaintext_file_extention(src=doc)
         print(f"copy \t\t{relpath(doc)} \tto \t{relpath(archive)}")
         shutil.copy2(src=doc, dst=archive)
         
