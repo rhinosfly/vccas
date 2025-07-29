@@ -99,12 +99,14 @@ def archive(args: Namespace):
     '''create document from xml'''
     config = get_config(args.CONFIG)
     for i,_ in enumerate(config["documents"]):
+        archive_format = config["archive_format"]
         target = config["targets"][i]
         archive = config["archives"][i]
         doc = config["documents"][i]
         # make zip
         print(f"archive \t{relpath(target)} \tto \t{relpath(archive)}")
-        shutil.make_archive(base_name=archive, root_dir=target, format="zip")
+        base_name = path.splitext(archive)[0] # get name without file extention
+        shutil.make_archive(base_name=base_name, root_dir=target, format=archive_format)
         # copy to docx
         print(f"copy \t\t{relpath(archive)} \tto \t{relpath(doc)}")
         shutil.copy2(src=archive, dst=doc)

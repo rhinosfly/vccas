@@ -31,13 +31,15 @@ def rectify_paths(config: dict[str, Any], config_dir: str):
 
 def get_dependent_variables(config: dict[str, str|list[str]]):
     '''add more keys to config'''
+    ARCHIVE_FORMAT = "zip"
     config["targets"] = []
     config["archives"] = []
+    config["archive_format"] = ARCHIVE_FORMAT
     for doc in config["documents"]:
         basename:str = os.path.basename(doc)
         filename:str = os.path.splitext(basename)[0]
         target:str = os.path.join(str(config["target"]), filename)
-        archive:str = target + ".zip"
+        archive:str = target + "." + config["archive_format"]
         config["targets"].append(target)
         config["archives"].append(archive)
     del config["target"]
