@@ -1,4 +1,5 @@
-'''extract zip archive into docx'''
+'''convert between archive and xml + plaintext'''
+
 from argparse import Namespace
 import shutil
 from os import path
@@ -9,39 +10,79 @@ import pandas
 import sys
 from config import get_config
 
+
+def convert_pandoc(src: str, dst: str):
+    '''
+    convert a document file using pandoc
+
+    one of the conversion functions called by extract
+    '''
+    tmp = pandoc.read(file=src)
+    pandoc.write(tmp, file=dst)
+
+
+def excel_to_csv(excel: str, csv: str):
+    '''
+    convert an excel spreadsheet to csv with pandas
+
+    one of the conversion functions called by extract
+    '''
+    data = pandas.read_excel(excel)
+    data.to_csv(csv)
+
+
 class Conversion_Target:
+    '''
+    a struct with a filetype and converter function
+
+    for use in conversion_mappings dictionary
+    '''
     def __init__(self, target_type: str, converter: Callable[[str, str], None]):
         self.target_type = target_type
         self.convert = converter
 
-def convert_pandoc(src: str, dst: str):
-    tmp = pandoc.read(file=src)
-    pandoc.write(tmp, file=dst)
 
-def excel_to_csv(excel: str, csv: str):
-    data = pandas.read_excel(excel)
-    data.to_csv(csv)
+'''
+dictionary mapping filetypes to a Conversion_Target with their plaintext equivalent filetypes and a converter function
 
+a centralized place to decide how to cenvert different filetypes
+'''
 conversion_mappings = {
     "docx": Conversion_Target("markdown", convert_pandoc),
     "xlsx": Conversion_Target("csv", excel_to_csv),
     "other": Conversion_Target("markdown", convert_pandoc)
 }
+
+
+'''
+a dictionary mapping conversion targets to their file extentions
+
+necessary because pandoc filetypes are not the same as extentions
+'''
 file_extention_mappings = {
     "markdown": "md"
 }
 
+
 def convert(src: str, dst: str):
-    """call appropriate conversion function on files accoridng to conversion mappings"""
+    """
+    call appropriate conversion function on files accoridng to conversion mappings
+
+    called by extract
+    """
     src_type = path.splitext(src)[1][1:]
-    print(src_type)
     if src_type in conversion_mappings.keys():
         conversion_mappings[src_type].convert(src, dst)
     else:
         conversion_mappings["other"].convert(src, dst)
 
+
 def get_plaintext_file_extention(src: str) -> str:
-    '''return corrosponding plaintext type for each archive type'''
+    '''
+    return corrosponding plaintext type for an archive file
+
+    called by extract to figure out the target file for conversion
+    '''
     src_type = path.splitext(src)[1][1:] # to get rid of the . before extention name
     if src_type in conversion_mappings.keys():
         target_type = conversion_mappings[src_type].target_type
@@ -52,6 +93,7 @@ def get_plaintext_file_extention(src: str) -> str:
     else:
         file_extention = target_type
     return file_extention
+
 
 def archive(args: Namespace):
     '''create document from xml'''
@@ -66,6 +108,7 @@ def archive(args: Namespace):
         # copy to docx
         print(f"copy \t\t{relpath(archive)} \tto \t{relpath(doc)}")
         shutil.copy2(src=archive, dst=doc)
+
 
 def extract(args: Namespace):
     '''extract xml from archive'''
@@ -83,8 +126,6 @@ def extract(args: Namespace):
 
         print(f"convert \t{relpath(doc)} \tto \t{relpath(plaintext)}")
         convert(src=doc, dst=plaintext)
-
-
 
 
 def main():
