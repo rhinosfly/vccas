@@ -2,7 +2,7 @@
 
 from argparse import Namespace
 import os
-from config import get_config
+from .config import get_config
 
 
 def get_dir_size(start_path: str = '.') -> int:

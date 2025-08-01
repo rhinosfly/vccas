@@ -1,9 +1,9 @@
 '''root of application'''
 
 import argparse
-import size
-import verify
-import convert
+from . import size
+from . import verify
+from . import convert
 
 PROGRAM_NAME = "vccas"
 __version__ = "v0.2.1"

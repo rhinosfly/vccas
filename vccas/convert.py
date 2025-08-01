@@ -8,7 +8,7 @@ from typing import Callable
 import pandoc
 import pandas
 import sys
-from config import get_config
+from .config import get_config
 
 
 def convert_pandoc(src: str, dst: str):

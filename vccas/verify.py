@@ -1,7 +1,7 @@
 from argparse import Namespace
 import hashlib
 
-from config import get_config
+from .config import get_config
 
 
 def get_file_checksum(file_name: str):
