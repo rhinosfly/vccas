@@ -1,0 +1,7 @@
+[project]
+name = "vccas"
+version = "0.2.1"
+
+
+[project.scripts]
+vccas = "vccas.main:main"
