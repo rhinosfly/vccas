@@ -5,6 +5,7 @@ from pathlib import Path
 from . import size
 from . import verify
 from . import convert
+from . import init
 from .config import get_toml
 
 
@@ -24,6 +25,8 @@ def parse_args() -> argparse.Namespace:
     verifier.set_defaults(func=verify.verify)
     measure = subparsers.add_parser("measure", help="record and print size of configured files", parents=[parent_parser])
     measure.set_defaults(func=size.measure)
+    initializer = subparsers.add_parser("init", help="write example .vccas.toml file", parents=[parent_parser])
+    initializer.set_defaults(func=init.init)
 
     args = parser.parse_args()
     return args
