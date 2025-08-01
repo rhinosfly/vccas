@@ -1,12 +1,11 @@
 '''root of application'''
 
 import argparse
+from pathlib import Path
 from . import size
 from . import verify
 from . import convert
-
-PROGRAM_NAME = "vccas"
-__version__ = "v0.2.1"
+from .config import get_toml
 
 
 def parse_args() -> argparse.Namespace:
@@ -30,7 +29,20 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
+def get_metadata():
+    """set metadata from pyproject.toml"""
+    global PROGRAM_NAME
+    global __version__
+    
+    PYPROJECT_TOML = Path(__file__).absolute().parent  / Path("../pyproject.toml")
+    config = get_toml(PYPROJECT_TOML)
+    PROGRAM_NAME = config["project"]["name"]
+    __version__ = config["project"]["version"]
+
+
+
 def main():
+    get_metadata()
     args = parse_args()
     args.func(args)
 
