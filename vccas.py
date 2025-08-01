@@ -6,12 +6,12 @@ import verify
 import convert
 
 PROGRAM_NAME = "vccas"
-VERSION = "v0.2.0"
+__version__ = "v0.2.1"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "--version", action="version", version=f"{PROGRAM_NAME} {VERSION}" )
+    parser.add_argument("-v", "--version", action="version", version=f"{PROGRAM_NAME} {__version__}" )
 
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument("CONFIG", help="config file path, or directory to search", default=".", nargs="?")
