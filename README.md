@@ -7,5 +7,6 @@ set of scripts for effectively version controlling compressed-archive projects
 
 ## todo
 
-- [ ] fix pandoc error
-- [ ] store hash
+- [ ] fix pandoc error (how?)
+- [ ] store hash (and stop storing zip file!)
+- [ ] better (any) error handing (e.g. when extraction directory DNE)
