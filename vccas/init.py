@@ -1,4 +1,4 @@
-"""initialize exapmle .vccas.toml in cwd"""
+"""initialize example .vccas.toml in cwd"""
 
 from argparse import Namespace
 
@@ -9,7 +9,7 @@ def init(args: Namespace | None = None):
     toml_text = """documents     = ["src/document1.docx", "src/document2.docx"]
 target        = "extracted_files"
 measuring     = [".git", "src/document1.docx"]
-measurements  = "extracted_files/measurement.csv"
+measurements  = "extracted_files/measurement.tsv"
 """
     path = ".vccas.toml"
     print(f"initializing {path}")
