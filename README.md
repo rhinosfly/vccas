@@ -10,3 +10,4 @@ set of scripts for effectively version controlling compressed-archive projects
 - [ ] fix pandoc error (how?)
 - [ ] store hash (and stop storing zip file!)
 - [ ] better (any) error handing (e.g. when extraction directory DNE)
+- [ ] don't read data from pyproject.toml (error on non-editable install)
